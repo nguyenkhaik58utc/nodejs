@@ -1,0 +1,71 @@
+<p class="innerText"></p>
+
+<audio id="bg-music" src="NguyenLam.mp3"></audio> <!-- Đặt đường dẫn tới file MP3 của bạn -->
+
+<style>
+.innerText {
+    font-size: 20px;
+    white-space: pre-wrap;
+    font-family: monospace;
+    background: black;
+}
+</style>
+
+<script>
+const WHITE = "color: white;";
+const RED = "color: red;";
+
+const lyrics = [
+    [`<span style="${WHITE}">Nguyện làm vầng trăng soi sáng đường</span>`, 3.2, 0.09],
+    [`<span style="${WHITE}">Nguyện làm màn đêm yên giấc em</span>`, 3.5, 0.11],
+    [`<span style="${WHITE}">Khi những trưa nắng hè, anh làm bóng mát cho em.</span>`, 6.5, 0.1],
+    [`<span style="${WHITE}">Nguyện làm giường êm em muốn nằm</span>`, 4, 0.12],
+    [`<span style="${WHITE}">Nguyện làm chăn ấm những đêm đông</span>`, 4, 0.085],
+    [`<span style="${WHITE}">Nguyện làm gối êm thu về em tựa vào lòng anh</span>`, 8, 0.13],
+    [`<span style="${WHITE}">Nguyện làm hàng cây dưới đường</span>`, 4, 0.1],
+    [`<span style="${WHITE}">Nghiêng dài để anh che nắng em</span>`, 3.5, 0.11],
+    [`<span style="${WHITE}">Anh sẽ luôn bên cạnh, cả đời che chở em</span>`, 6, 0.13],
+    [`<span style="${WHITE}">Nguyện làm vì sao em ngước nhìn</span>`, 4, 0.12],
+    [`<span style="${WHITE}">Nghe chuyện thì thầm em mỗi đêm</span>`, 3, 0.09],
+    [`<span style="${WHITE}">Nguyện làm gió xuân trong lành</span>`, 3, 0.08],
+    [`<span style="${WHITE}">Luôn quanh quẩn bên em</span>`, 3, 0.1],
+    [`<span style="${RED}">Nguyện làm gió xuân trong lành</span>`, 4, 0.1],
+    [`<span style="${RED}">Luôn quanh quẩn</span>`, 3, 0.2],
+    [`<span style="${RED}">bên EM</span>`, 11, 0.3]
+];
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function karaoke(lyricsList) {
+    const p = document.querySelector(".innerText");
+    p.innerHTML = "";
+
+    for (let i = 0; i < lyricsList.length; i++) {
+        const [htmlText, pause, delay] = lyricsList[i];
+
+        const match = htmlText.match(/<span style="([^"]+)">(.+)<\/span>/);
+        const color = match ? match[1] : "";
+        const text = match ? match[2] : htmlText;
+
+        let line = "";
+        for (const ch of text) {
+            line += `<span style="${color}">${ch}</span>`;
+            p.innerHTML = line;
+            await sleep(delay * 1000);
+        }
+
+        if (i < lyricsList.length - 1) {
+            await sleep(0.2 * 1000);
+            p.innerHTML += "\n";
+        }
+    }
+}
+
+document.addEventListener("click", () => {
+    const audio = document.getElementById("bg-music");
+    audio.play(); 
+    karaoke(lyrics);
+}, { once: true });
+</script>
